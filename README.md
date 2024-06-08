@@ -5,3 +5,8 @@ Count the number of distinct items in a stream using fixed sized memory. The CVM
 ## JPEG
 
 - Color Space conversion [equations](https://www.w3.org/Graphics/JPEG/jfif3.pdf)
+
+## pacman-rust
+
+pacman in CLI ([C++ repo](https://github.com/arch-raven/not-so-awesome-cpp))
+
