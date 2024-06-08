@@ -74,7 +74,7 @@ impl Pacman {
     }
 
     pub fn move_character(&mut self, arena: &mut Arena, user: UserInput) {
-        self.direction = match UserInput::Invalid {
+        self.direction = match user {
             UserInput::Invalid => self.direction,
             _ => user.to_coordinates(),
         };
