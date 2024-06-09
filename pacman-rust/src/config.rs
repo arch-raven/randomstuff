@@ -6,12 +6,6 @@ pub const PALLETE_POINTS: u32 = 20;
 pub const POWER_PALLETE_POINTS: u32 = 100;
 pub const FRIGHTENED_MODE_TIMER: u32 = 10;
 pub const OVERLORD_TEAM_SIZE: usize = 4;
-pub const DIRECTIONS: [Coordinates; 4] = [
-    Coordinates { x: -1, y: 0 },
-    Coordinates { x: 0, y: 1 },
-    Coordinates { x: -1, y: 0 },
-    Coordinates { x: 1, y: 0 },
-];
 
 #[derive(Clone, Copy, Debug)]
 pub struct Coordinates {

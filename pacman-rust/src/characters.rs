@@ -1,5 +1,5 @@
 use crate::arena::Arena;
-use crate::config::{self, Coordinates, Icons, DIRECTIONS, OVERLORD_TEAM_SIZE};
+use crate::config::{self, Coordinates, Icons, OVERLORD_TEAM_SIZE};
 use crate::control::UserInput;
 use rand::seq::SliceRandom;
 use rand::thread_rng;
@@ -7,8 +7,8 @@ use rand::thread_rng;
 struct Ghost {
     icon: Icons,
     position: Coordinates,
-    direction_id: usize,
-    direction_order: [i32; 4],
+    direction: Coordinates,
+    directions: [Coordinates; 4],
 }
 
 impl Default for Ghost {
@@ -16,35 +16,35 @@ impl Default for Ghost {
         Self {
             icon: Icons::Ghost,
             position: Coordinates::new(0, 0),
-            direction_id: 0,
-            direction_order: [-1, 0, 1, 2],
+            direction: Coordinates { x: -1, y: 0 },
+            directions: [
+                Coordinates { x: -1, y: 0 },
+                Coordinates { x: 0, y: 1 },
+                Coordinates { x: -1, y: 0 },
+                Coordinates { x: 1, y: 0 },
+            ],
         }
     }
 }
 
 impl Ghost {
     pub fn new(arena: &mut Arena) -> Self {
-        let position = arena.init_icon_position(Icons::Ghost);
-        Self {
-            icon: Icons::Ghost,
-            position,
-            direction_id: 0,
-            direction_order: [-1, 0, 1, 2],
-        }
+        let mut ghost = Ghost::default();
+        ghost.position = arena.init_icon_position(Icons::Ghost);
+        ghost
     }
 
     pub fn move_character(&mut self, arena: &mut Arena) {
         let (x, y) = self.position.to_tuple();
-        self.direction_order.shuffle(&mut thread_rng());
-        for rand_dir in self.direction_order {
-            let d_id = (self.direction_id as i32 + rand_dir).rem_euclid(4) as usize;
-            let new_position = self.position + DIRECTIONS[d_id];
+        self.directions.shuffle(&mut thread_rng());
+        for rand_direction in self.directions {
+            let new_position = self.position + rand_direction;
             let (nx, ny) = new_position.to_tuple();
             if arena.board[ny][nx] != Icons::Wall {
                 arena.board[y][x] = arena.static_board[ny][nx];
                 arena.board[ny][nx] = self.icon;
                 self.position = new_position;
-                self.direction_id = d_id;
+                self.direction = rand_direction;
                 break;
             }
         }
@@ -142,7 +142,7 @@ impl Overlord {
     fn check_for_headon_collision(&self, pacman: &mut Pacman) {
         for ghost in self.ghosts.iter() {
             if ghost.position == pacman.position
-                && DIRECTIONS[ghost.direction_id] == pacman.direction
+                && ghost.direction == pacman.direction
                 && !self.frightened_mode
             {
                 pacman.status = false;
