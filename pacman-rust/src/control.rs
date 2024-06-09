@@ -1,4 +1,5 @@
 use crate::config::Coordinates;
+use crossterm::event::{read, Event, KeyCode};
 
 #[derive(PartialEq, Eq)]
 pub enum UserInput {
@@ -11,16 +12,18 @@ pub enum UserInput {
 }
 
 pub fn get_user_input() -> UserInput {
-    let mut input = String::new();
-    std::io::stdin().read_line(&mut input).unwrap();
-    match input.trim() {
-        "w" => UserInput::Up,
-        "s" => UserInput::Down,
-        "a" => UserInput::Left,
-        "d" => UserInput::Right,
-        "q" => UserInput::Quit,
-        _ => UserInput::Invalid,
+    let mut input = UserInput::Invalid;
+    if let Event::Key(key_event) = read().unwrap() {
+        input = match key_event.code {
+            KeyCode::Up => UserInput::Up,
+            KeyCode::Down => UserInput::Down,
+            KeyCode::Left => UserInput::Left,
+            KeyCode::Right => UserInput::Right,
+            KeyCode::Char('q') => UserInput::Quit,
+            _ => UserInput::Invalid,
+        };
     }
+    input
 }
 
 impl UserInput {

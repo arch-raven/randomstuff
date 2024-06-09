@@ -1,4 +1,8 @@
 use crate::config::*;
+use crossterm::{
+    execute,
+    terminal::{Clear, ClearType},
+};
 
 pub struct Arena {
     pub static_board: Vec<Vec<Icons>>,
@@ -49,9 +53,10 @@ impl Arena {
     }
 
     pub fn display(&self) {
+        execute!(std::io::stdout(), Clear(ClearType::All)).unwrap();
         for row in self.board.iter() {
             for icon in row.iter() {
-                print!("{}", icon.to_char());
+                print!("{} ", icon.to_char());
             }
             println!();
         }
