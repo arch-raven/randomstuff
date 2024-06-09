@@ -1,8 +1,7 @@
 use crate::arena::Arena;
 use crate::config::{self, Coordinates, Icons, OVERLORD_TEAM_SIZE};
 use crate::control::UserInput;
-use rand::seq::SliceRandom;
-use rand::thread_rng;
+use rand::{seq::SliceRandom, thread_rng};
 
 struct Ghost {
     icon: Icons,
@@ -29,9 +28,10 @@ impl Default for Ghost {
 
 impl Ghost {
     pub fn new(arena: &mut Arena) -> Self {
-        let mut ghost = Ghost::default();
-        ghost.position = arena.init_icon_position(Icons::Ghost);
-        ghost
+        Self {
+            position: arena.init_icon_position(Icons::Ghost),
+            ..Default::default()
+        }
     }
 
     pub fn move_character(&mut self, arena: &mut Arena) {
