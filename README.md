@@ -10,3 +10,7 @@ Count the number of distinct items in a stream using fixed sized memory. The CVM
 
 pacman in CLI ([C++ repo](https://github.com/arch-raven/not-so-awesome-cpp))
 
+## Byte Pair Tokenizer
+
+train a BPE tokenizer on any text corpus [reference paper](https://arxiv.org/abs/1508.07909)
+
